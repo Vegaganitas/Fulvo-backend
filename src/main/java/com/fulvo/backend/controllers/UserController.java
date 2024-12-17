@@ -1,8 +1,9 @@
 package com.fulvo.backend.controllers;
 
 import com.fulvo.backend.models.User;
-import com.fulvo.backend.repositories.UserRepository;
+import com.fulvo.backend.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -12,28 +13,29 @@ import java.util.List;
 public class UserController {
 
     @Autowired
-    private UserRepository userRepository;
+    private UserService userService;
 
     @GetMapping("/all")
     public List<User> getAllUsers() {
-        return userRepository.findAll();
+        return userService.getAllUsers();
     }
 
     @GetMapping("/{id}")
     public User getUserById(@PathVariable int id) {
-        return userRepository.findById(id).orElse(null);
+        return userService.getUserById(id).orElse(null);
     }
 
+    @Transactional
     @PostMapping
     public User createUser(@RequestBody User user) {
-        return userRepository.save(user);
+        return userService.createUser(user);
     }
 
     @DeleteMapping("/{id}")
     public User deleteUser(@PathVariable int id) {
-        User user = userRepository.findById(id).orElse(null);
+        User user = userService.getUserById(id).orElse(null);
         if (user != null) {
-            userRepository.delete(user);
+            userService.deleteUser(id);
         }
         return user;
     }
