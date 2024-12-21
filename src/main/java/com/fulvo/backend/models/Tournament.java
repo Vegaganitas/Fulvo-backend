@@ -8,8 +8,8 @@ import java.util.Date;
 
 @Data
 @Entity
-@Table(name = "leagues", schema = "main")
-public class League {
+@Table(name = "tournaments", schema = "main") // DEBERÍA LLAMARSE TOURNAMENTS
+public class Tournament {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
