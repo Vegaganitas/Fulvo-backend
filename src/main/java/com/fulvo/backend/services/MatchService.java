@@ -1,10 +1,12 @@
 package com.fulvo.backend.services;
 
 import com.fulvo.backend.models.Match;
+import com.fulvo.backend.models.Scoreboard;
 import com.fulvo.backend.repositories.MatchRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -26,6 +28,22 @@ public class MatchService {
     // Crear un nuevo registro en la tabla match
     public Match createMatch(Match match) {
         return matchRepository.save(match);
+    }
+
+    // Generar partidos
+    public List<Match> generateMatches(List<Scoreboard> scoreboards) {
+        List<Match> matches = new ArrayList<>();
+        for (int i = 0; i < scoreboards.size(); i++) {
+            for (int j = i + 1; j < scoreboards.size(); j++) {
+                Match match = new Match();
+                match.setTournament(scoreboards.get(i).getTournament());
+                match.setHomeTeam(scoreboards.get(i).getTeam());
+                match.setAwayTeam(scoreboards.get(j).getTeam());
+                matchRepository.save(match);
+                matches.add(match);
+            }
+        }
+        return matches;
     }
 
     // Eliminar un registro de la tabla match por ID

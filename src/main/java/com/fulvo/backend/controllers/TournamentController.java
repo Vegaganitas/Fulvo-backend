@@ -1,18 +1,29 @@
 package com.fulvo.backend.controllers;
 
+import com.fulvo.backend.models.Match;
+import com.fulvo.backend.models.Scoreboard;
 import com.fulvo.backend.models.Tournament;
+import com.fulvo.backend.services.MatchService;
+import com.fulvo.backend.services.ScoreboardService;
 import com.fulvo.backend.services.TournamentService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/tournaments") // DEBERÍA LLAMARSE TOURNAMENTS
+@RequestMapping("/tournaments")
 public class TournamentController {
 
     @Autowired
     private TournamentService tournamentService;
+    @Autowired
+    private ScoreboardService scoreboardService;
+    @Autowired
+    private MatchService matchService;
 
     // Obtener todas las ligas
     @GetMapping("/all")
@@ -22,40 +33,70 @@ public class TournamentController {
 
     // Obtener una liga por ID
     @GetMapping("/{id}")
-    public Tournament getTournamentById(@PathVariable int id) {
-        return tournamentService.getTournamentById(id);
+    public ResponseEntity<Tournament> getTournamentById(@PathVariable int id) {
+        Tournament tournament = tournamentService.getTournamentById(id);
+        if (tournament != null) {
+            return ResponseEntity.ok(tournament);  // 200 OK
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();  // 404 Not Found
+        }
     }
 
     // Crear una nueva liga
     @PostMapping
-    public Tournament createTournament(@RequestBody Tournament tournament) {
-        return tournamentService.createTournament(tournament);
+    @Transactional
+    public ResponseEntity<Tournament> createTournament(@RequestBody Tournament tournament) {
+        Tournament createdTournament = tournamentService.createTournament(tournament);
+        return ResponseEntity
+                .status(HttpStatus.CREATED)  // 201 Created
+                .body(createdTournament);
+    }
+
+    @PostMapping("{tournamentId}/matches")
+    public ResponseEntity<?> generateMatches(@PathVariable int tournamentId) {
+        List<Scoreboard> scoreboards = scoreboardService.getAllScoreboardByTournamentId(tournamentId);
+        List<Match> matches = matchService.generateMatches(scoreboards);
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(matches);
     }
 
     // Eliminar una liga por ID
     @DeleteMapping("/{id}")
-    public Tournament deleteTournament(@PathVariable int id) {
+    @Transactional
+    public ResponseEntity<Tournament> deleteTournament(@PathVariable int id) {
         Tournament league = tournamentService.getTournamentById(id);
         if (league != null) {
             tournamentService.deleteTournament(id);
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();  // 204 No Content
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();  // 404 Not Found
         }
-        return league;
     }
 
     // Eliminar todas las ligas
     @DeleteMapping("/all")
-    public List<Tournament> deleteAllTournaments() {
+    @Transactional
+    public ResponseEntity<List<Tournament>> deleteAllTournaments() {
         List<Tournament> leagues = tournamentService.getAllTournaments();
-        tournamentService.deleteAllTournaments();
-        return leagues;
+        if (leagues.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();  // 204 No Content
+        } else {
+            tournamentService.deleteAllTournaments();
+            return ResponseEntity.ok(leagues);  // 200 OK
+        }
     }
 
     // Eliminar todas las ligas de un Admin
     @DeleteMapping("/admin/{adminId}")
-    public List<Tournament> deleteAllTournamentsByAdminId(@PathVariable int adminId) {
+    @Transactional
+    public ResponseEntity<List<Tournament>> deleteAllTournamentsByAdminId(@PathVariable int adminId) {
         List<Tournament> leagues = tournamentService.getAllTournamentsByAdminId(adminId);
-        tournamentService.deleteAllTournamentsByAdminId(adminId);
-        return leagues;
+        if (leagues.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();  // 204 No Content
+        } else {
+            tournamentService.deleteAllTournamentsByAdminId(adminId);
+            return ResponseEntity.ok(leagues);  // 200 OK
+        }
     }
-
 }

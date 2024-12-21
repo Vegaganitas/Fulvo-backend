@@ -1,6 +1,9 @@
 package com.fulvo.backend.services;
 
+import com.fulvo.backend.models.Scoreboard;
 import com.fulvo.backend.models.Tournament;
+import com.fulvo.backend.repositories.MatchRepository;
+import com.fulvo.backend.repositories.ScoreboardRepository;
 import com.fulvo.backend.repositories.TournamentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -12,7 +15,8 @@ public class TournamentService {
 
     @Autowired
     private TournamentRepository tournamentRepository;
-
+    @Autowired
+    private ScoreboardRepository scoreboardRepository;
     // Obtener todas las ligas
     public List<Tournament> getAllTournaments() {
         return tournamentRepository.findAll();
