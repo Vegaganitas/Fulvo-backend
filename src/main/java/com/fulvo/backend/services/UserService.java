@@ -38,4 +38,10 @@ public class UserService {
     public void deleteUser(int id) {
         userRepository.deleteById(id);
     }
+
+    // Eliminar todos los usuarios
+    public void deleteAllUsers() {
+        userRepository.deleteAll();
+    }
+
 }

@@ -30,9 +30,32 @@ public class TeamController {
         return teamService.getTeamById(id);
     }
 
+    // Obtener todos los equipos de un capitán
+    @GetMapping("/captain/{id}")
+    public List<Team> getTeamsByCaptain(@PathVariable int id) {
+        return teamService.getTeamsByCaptain(id);
+    }
+
     // Crear un nuevo equipo
     @PostMapping
     public Team createTeam(@RequestBody Team team) {
         return teamService.createTeam(team);
     }
+
+    // Eliminar un equipo por ID
+    @DeleteMapping("/{id}")
+    public Team deleteTeam(@PathVariable int id) {
+        Team team = teamService.getTeamById(id);
+        if (team != null) {
+            teamService.deleteTeam(id);
+        }
+        return team;
+    }
+
+    // Eliminar todos los equipos de un capitán
+    @DeleteMapping("/captain/{id}")
+    public List<Team> deleteTeamsByCaptain(@PathVariable int id) {
+        return teamService.deleteTeamByCaptain(id);
+    }
+
 }

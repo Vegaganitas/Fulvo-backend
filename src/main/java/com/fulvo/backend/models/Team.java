@@ -16,6 +16,7 @@ public class Team {
     private String name;
     @Column(name = "description")
     private String description;
+
     @ManyToOne
     @JoinColumn(name = "captain_id", referencedColumnName = "id")
     private User captain;

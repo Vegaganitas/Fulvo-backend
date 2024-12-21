@@ -29,6 +29,10 @@ public class User {
     private Integer age;
     @Column(name = "birthdate")
     private LocalDate birthDate;
+    @Column(name = "genre")
+    private String genre;
+    @Column(name = "address")
+    private String address;
 
     public int getId() {
         return id;
@@ -96,5 +100,21 @@ public class User {
 
     public void setBirthDate(LocalDate birthDate) {
         this.birthDate = birthDate;
+    }
+
+    public String getGenre() {
+        return genre;
+    }
+
+    public void setGenre(String genre) {
+        this.genre = genre;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
     }
 }
