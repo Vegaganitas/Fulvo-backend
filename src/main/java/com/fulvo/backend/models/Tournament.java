@@ -4,7 +4,9 @@ package com.fulvo.backend.models;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Data
 @Entity
@@ -35,6 +37,9 @@ public class Tournament {
     private String leagueAddress;
     @Column(name = "privacy")
     private String privacy;
+
+//    @OneToMany(mappedBy = "tournament", cascade = CascadeType.ALL, orphanRemoval = true)
+//    private List<Scoreboard> scoreboards = new ArrayList<>();
 
     public int getId() {
         return id;
@@ -119,4 +124,18 @@ public class Tournament {
     public void setPrivacy(String privacy) {
         this.privacy = privacy;
     }
+
+//    public List<Scoreboard> getScoreboards() {
+//        return scoreboards;
+//    }
+//
+//    public void addScoreboard(Scoreboard scoreboard) {
+//        this.scoreboards.add(scoreboard);
+//        scoreboard.setTournament(this);
+//    }
+//
+//    public void removeScoreboard(Scoreboard scoreboard) {
+//        this.scoreboards.remove(scoreboard);
+//        scoreboard.setTournament(null);
+//    }
 }

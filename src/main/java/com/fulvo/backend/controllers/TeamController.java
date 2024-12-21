@@ -15,9 +15,6 @@ public class TeamController {
     @Autowired
     private TeamService teamService;
 
-    @Autowired
-    private UserService userService;
-
     // Obtener todos los equipos
     @GetMapping("/all")
     public List<Team> getAllTeams() {
