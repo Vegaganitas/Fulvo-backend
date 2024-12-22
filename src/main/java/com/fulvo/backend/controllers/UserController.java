@@ -29,15 +29,15 @@ public class UserController {
     }
 
     // Crear un nuevo usuario
-    @Transactional
     @PostMapping
+    @Transactional
     public User createUser(@RequestBody User user) {
         return userService.createUser(user);
     }
 
     // Eliminar un usuario por ID
-    @Transactional
     @DeleteMapping("/{id}")
+    @Transactional
     public User deleteUser(@PathVariable int id) {
         User user = userService.getUserById(id).orElse(null);
         if (user != null) {
@@ -47,8 +47,8 @@ public class UserController {
     }
 
     // Eliminar todos los usuarios
-    @Transactional
     @DeleteMapping("/all")
+    @Transactional
     public ResponseEntity<List<User>> deleteAllUsers() {
         List<User> users = userService.getAllUsers();
         userService.deleteAllUsers();

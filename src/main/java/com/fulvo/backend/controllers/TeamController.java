@@ -4,6 +4,7 @@ import com.fulvo.backend.models.Team;
 import com.fulvo.backend.services.TeamService;
 import com.fulvo.backend.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -35,12 +36,14 @@ public class TeamController {
 
     // Crear un nuevo equipo
     @PostMapping
+    @Transactional
     public Team createTeam(@RequestBody Team team) {
         return teamService.createTeam(team);
     }
 
     // Eliminar un equipo por ID
     @DeleteMapping("/{id}")
+    @Transactional
     public Team deleteTeam(@PathVariable int id) {
         Team team = teamService.getTeamById(id);
         if (team != null) {
@@ -51,6 +54,7 @@ public class TeamController {
 
     // Eliminar todos los equipos de un capitán
     @DeleteMapping("/captain/{id}")
+    @Transactional
     public List<Team> deleteTeamsByCaptain(@PathVariable int id) {
         return teamService.deleteTeamByCaptain(id);
     }

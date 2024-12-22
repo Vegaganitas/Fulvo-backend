@@ -3,6 +3,7 @@ package com.fulvo.backend.controllers;
 import com.fulvo.backend.models.Scoreboard;
 import com.fulvo.backend.services.ScoreboardService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -28,18 +29,21 @@ public class ScoreboardController {
 
     // Obtener un registro de la tabla scoreboard por ID
     @GetMapping("/{id}")
+    @Transactional
     public Scoreboard getScoreboardById(@PathVariable int id) {
         return scoreboardService.getScoreboardById(id);
     }
 
     // Crear un nuevo registro en la tabla scoreboard
     @PostMapping
+    @Transactional
     public Scoreboard createScoreboard(@RequestBody Scoreboard scoreboard) {
         return scoreboardService.createScoreboard(scoreboard);
     }
 
     // Eliminar un registro de la tabla scoreboard por ID
     @DeleteMapping("/{id}")
+    @Transactional
     public void deleteScoreboard(@PathVariable int id) {
         scoreboardService.deleteScoreboard(id);
     }

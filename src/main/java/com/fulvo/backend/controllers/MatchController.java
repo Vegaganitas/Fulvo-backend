@@ -3,6 +3,7 @@ package com.fulvo.backend.controllers;
 import com.fulvo.backend.models.Match;
 import com.fulvo.backend.services.MatchService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -28,18 +29,21 @@ public class MatchController {
 
     // Crear un nuevo registro en la tabla match
     @PostMapping
+    @Transactional
     public Match createMatch(@RequestBody Match match) {
         return matchService.createMatch(match);
     }
 
     // Eliminar un registro de la tabla match por ID
     @DeleteMapping("/{id}")
+    @Transactional
     public void deleteMatch(@PathVariable int id) {
         matchService.deleteMatch(id);
     }
 
     // Actualizar un registro de la tabla match por ID
     @PutMapping("/{id}")
+    @Transactional
     public Match updateMatch(@PathVariable int id, @RequestBody Match match) {
         return matchService.updateMatch(id, match);
     }
