@@ -1,5 +1,6 @@
 package com.fulvo.backend.services;
 
+import com.fulvo.backend.models.Match;
 import com.fulvo.backend.models.Scoreboard;
 import com.fulvo.backend.models.Tournament;
 import com.fulvo.backend.repositories.MatchRepository;
@@ -17,6 +18,9 @@ public class TournamentService {
     private TournamentRepository tournamentRepository;
     @Autowired
     private ScoreboardRepository scoreboardRepository;
+    @Autowired
+    private MatchService matchService;
+
     // Obtener todas las ligas
     public List<Tournament> getAllTournaments() {
         return tournamentRepository.findAll();
@@ -50,6 +54,12 @@ public class TournamentService {
     // Eliminar todas las ligas de un Admin
     public void deleteAllTournamentsByAdminId(int adminId) {
         tournamentRepository.deleteAllByAdminId(adminId);
+    }
+
+    // Generar fixture de un torneo
+    public List<Match> generateFixtureByTournament(int tournament){
+        List<Scoreboard> scoreboards = scoreboardRepository.findAllByTournamentId(tournament);
+        return matchService.generateMatches(scoreboards);
     }
 
 }
