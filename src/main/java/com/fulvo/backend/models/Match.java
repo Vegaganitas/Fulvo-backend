@@ -22,7 +22,7 @@ public class Match {
     @JoinColumn(name = "home_team_id", referencedColumnName = "id")
     private Team homeTeam;
     @ManyToOne
-    @JoinColumn(name = "away_team_id", referencedColumnName = "id")
+    @JoinColumn(name = "away_team_id", referencedColumnName = "id", nullable = true)
     private Team awayTeam;
     private int homeTeamScore;
     private int awayTeamScore;

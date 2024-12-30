@@ -25,13 +25,13 @@ public class TournamentController {
     @Autowired
     private MatchService matchService;
 
-    // Obtener todas las ligas
+    // Obtener todos los torneo
     @GetMapping("/all")
     public List<Tournament> getAllTournaments() {
         return tournamentService.getAllTournaments();
     }
 
-    // Obtener una liga por ID
+    // Obtener una torneo por ID
     @GetMapping("/{id}")
     public ResponseEntity<Tournament> getTournamentById(@PathVariable int id) {
         Tournament tournament = tournamentService.getTournamentById(id);
@@ -42,7 +42,7 @@ public class TournamentController {
         }
     }
 
-    // Crear una nueva liga
+    // Crear una nueva torneo
     @PostMapping
     @Transactional
     public ResponseEntity<Tournament> createTournament(@RequestBody Tournament tournament) {
@@ -52,16 +52,16 @@ public class TournamentController {
                 .body(createdTournament);
     }
 
+    // Genera fixture de un torneo
     @PostMapping("{tournamentId}/matches")
     public ResponseEntity<?> generateMatches(@PathVariable int tournamentId) {
-        List<Scoreboard> scoreboards = scoreboardService.getAllScoreboardByTournamentId(tournamentId);
-        List<Match> matches = matchService.generateMatches(scoreboards);
+        List <Match> matches = tournamentService.generateFixtureByTournament(tournamentId);
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(matches);
     }
 
-    // Eliminar una liga por ID
+    // Eliminar una torneo por ID
     @DeleteMapping("/{id}")
     @Transactional
     public ResponseEntity<Tournament> deleteTournament(@PathVariable int id) {
@@ -74,7 +74,7 @@ public class TournamentController {
         }
     }
 
-    // Eliminar todas las ligas
+    // Eliminar todos los torneo
     @DeleteMapping("/all")
     @Transactional
     public ResponseEntity<List<Tournament>> deleteAllTournaments() {
@@ -87,7 +87,21 @@ public class TournamentController {
         }
     }
 
-    // Eliminar todas las ligas de un Admin
+    // Eliminar todos los partidos de un torneo
+    @DeleteMapping("/{tournament_id}/all")
+    @Transactional
+    public ResponseEntity<List<Match>> deleteAllMatchesByTournamentId(@PathVariable int tournament_id){
+        List<Match> matches = matchService.getAllMatchByTournamentId(tournament_id);
+        if (matches.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();  // 204 No Content
+        } else {
+            matchService.deleteAllMatches(matches);
+            return ResponseEntity.ok(matches);  // 200 OK
+        }
+    }
+
+
+    // Eliminar todos los torneo de un Admin
     @DeleteMapping("/admin/{adminId}")
     @Transactional
     public ResponseEntity<List<Tournament>> deleteAllTournamentsByAdminId(@PathVariable int adminId) {

@@ -24,9 +24,6 @@ public class Team {
     @JoinColumn(name = "captain_id", referencedColumnName = "id")
     private User captain;
 
-//    @OneToMany(mappedBy = "team", cascade = CascadeType.ALL, orphanRemoval = true)
-//    private List<Scoreboard> scoreboards =  new ArrayList<>();
-
     public int getId() {
         return id;
     }
@@ -54,19 +51,5 @@ public class Team {
     public void setCaptain(User captain) {
         this.captain = captain;
     }
-
-//    public List<Scoreboard> getScoreboards() {
-//        return scoreboards;
-//    }
-//
-//    public void addScoreboard(Scoreboard scoreboard) {
-//        this.scoreboards.add(scoreboard);
-//        scoreboard.setTeam(this);
-//    }
-//
-//    public void removeScoreboard(Scoreboard scoreboard) {
-//        this.scoreboards.remove(scoreboard);
-//        scoreboard.setTeam(null);
-//    }
 
 }
