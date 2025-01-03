@@ -38,9 +38,6 @@ public class Tournament {
     @Column(name = "privacy")
     private String privacy;
 
-//    @OneToMany(mappedBy = "tournament", cascade = CascadeType.ALL, orphanRemoval = true)
-//    private List<Scoreboard> scoreboards = new ArrayList<>();
-
     public int getId() {
         return id;
     }
@@ -125,17 +122,4 @@ public class Tournament {
         this.privacy = privacy;
     }
 
-//    public List<Scoreboard> getScoreboards() {
-//        return scoreboards;
-//    }
-//
-//    public void addScoreboard(Scoreboard scoreboard) {
-//        this.scoreboards.add(scoreboard);
-//        scoreboard.setTournament(this);
-//    }
-//
-//    public void removeScoreboard(Scoreboard scoreboard) {
-//        this.scoreboards.remove(scoreboard);
-//        scoreboard.setTournament(null);
-//    }
 }

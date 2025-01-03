@@ -33,6 +33,15 @@ public class User {
     private String genre;
     @Column(name = "address")
     private String address;
+    private String token;
+
+    public void setToken(String token){
+        this.token = token;
+    }
+
+    public String getToken(){
+        return token;
+    }
 
     public int getId() {
         return id;
