@@ -1,4 +1,4 @@
-package com.fulvo.backend.config;
+package com.fulvo.backend.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

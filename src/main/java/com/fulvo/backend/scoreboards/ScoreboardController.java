@@ -1,7 +1,5 @@
-package com.fulvo.backend.controllers;
+package com.fulvo.backend.scoreboards;
 
-import com.fulvo.backend.models.Scoreboard;
-import com.fulvo.backend.services.ScoreboardService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;

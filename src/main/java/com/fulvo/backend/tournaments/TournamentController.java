@@ -1,11 +1,8 @@
-package com.fulvo.backend.controllers;
+package com.fulvo.backend.tournaments;
 
-import com.fulvo.backend.models.Match;
-import com.fulvo.backend.models.Scoreboard;
-import com.fulvo.backend.models.Tournament;
-import com.fulvo.backend.services.MatchService;
-import com.fulvo.backend.services.ScoreboardService;
-import com.fulvo.backend.services.TournamentService;
+import com.fulvo.backend.matches.Match;
+import com.fulvo.backend.matches.MatchService;
+import com.fulvo.backend.scoreboards.ScoreboardService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

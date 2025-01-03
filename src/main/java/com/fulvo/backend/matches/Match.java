@@ -1,6 +1,9 @@
-package com.fulvo.backend.models;
+package com.fulvo.backend.matches;
 
 
+import com.fulvo.backend.users.User;
+import com.fulvo.backend.teams.Team;
+import com.fulvo.backend.tournaments.Tournament;
 import jakarta.persistence.*;
 import lombok.Data;
 

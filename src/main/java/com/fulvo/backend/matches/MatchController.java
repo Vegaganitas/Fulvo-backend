@@ -1,7 +1,5 @@
-package com.fulvo.backend.controllers;
+package com.fulvo.backend.matches;
 
-import com.fulvo.backend.models.Match;
-import com.fulvo.backend.services.MatchService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;

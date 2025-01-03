@@ -1,10 +1,8 @@
-package com.fulvo.backend.models;
+package com.fulvo.backend.teams;
 
+import com.fulvo.backend.users.User;
 import jakarta.persistence.*;
 import lombok.Data;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Data
 @Entity

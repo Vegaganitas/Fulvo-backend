@@ -1,7 +1,5 @@
-package com.fulvo.backend.services;
+package com.fulvo.backend.scoreboards;
 
-import com.fulvo.backend.models.Scoreboard;
-import com.fulvo.backend.repositories.ScoreboardRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

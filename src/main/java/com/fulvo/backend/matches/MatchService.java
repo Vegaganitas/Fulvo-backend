@@ -1,11 +1,8 @@
-package com.fulvo.backend.services;
+package com.fulvo.backend.matches;
 
-import com.fulvo.backend.models.Match;
-import com.fulvo.backend.models.Scoreboard;
-import com.fulvo.backend.models.Team;
-import com.fulvo.backend.models.Tournament;
-import com.fulvo.backend.repositories.MatchRepository;
-import com.fulvo.backend.repositories.ScoreboardRepository;
+import com.fulvo.backend.scoreboards.Scoreboard;
+import com.fulvo.backend.teams.TeamService;
+import com.fulvo.backend.tournaments.Tournament;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

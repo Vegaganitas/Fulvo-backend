@@ -1,6 +1,5 @@
-package com.fulvo.backend.repositories;
+package com.fulvo.backend.teams;
 
-import com.fulvo.backend.models.Team;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

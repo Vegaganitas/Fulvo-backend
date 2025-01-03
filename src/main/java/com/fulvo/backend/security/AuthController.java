@@ -1,4 +1,4 @@
-package com.fulvo.backend.controllers;
+package com.fulvo.backend.security;
 
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;

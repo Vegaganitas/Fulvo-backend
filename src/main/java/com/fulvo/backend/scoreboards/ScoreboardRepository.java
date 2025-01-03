@@ -1,5 +1,4 @@
-package com.fulvo.backend.repositories;
-import com.fulvo.backend.models.Scoreboard;
+package com.fulvo.backend.scoreboards;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;

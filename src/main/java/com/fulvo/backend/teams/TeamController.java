@@ -1,8 +1,5 @@
-package com.fulvo.backend.controllers;
+package com.fulvo.backend.teams;
 
-import com.fulvo.backend.models.Team;
-import com.fulvo.backend.services.TeamService;
-import com.fulvo.backend.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;

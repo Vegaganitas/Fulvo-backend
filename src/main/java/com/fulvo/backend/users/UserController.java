@@ -1,7 +1,5 @@
-package com.fulvo.backend.controllers;
+package com.fulvo.backend.users;
 
-import com.fulvo.backend.models.User;
-import com.fulvo.backend.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;

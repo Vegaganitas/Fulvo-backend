@@ -1,7 +1,5 @@
-package com.fulvo.backend.services;
+package com.fulvo.backend.users;
 
-import com.fulvo.backend.models.User;
-import com.fulvo.backend.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
