@@ -1,4 +1,4 @@
-package com.fulvo.backend.security;
+package com.fulvo.backend.auth;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -7,9 +7,8 @@ import lombok.NoArgsConstructor;
 
 @Data
 @Builder
-@AllArgsConstructor
 @NoArgsConstructor
-public class LoginRequest {
-    private String email;
-    private String password;
+@AllArgsConstructor
+public class AuthResponse {
+    String token;
 }

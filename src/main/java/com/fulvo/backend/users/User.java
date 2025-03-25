@@ -1,125 +1,37 @@
 package com.fulvo.backend.users;
 
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
-import java.time.LocalDate;
-@Data
+import java.util.Collection;
+import java.util.List;
+
 @Entity
-@Table(name = "users", schema = "main")
-public class User {
-
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+@Table(name = "Users", schema = "public")
+public class User implements UserDetails {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    @GeneratedValue
+    Integer id;
+    @Column(nullable = false)
+    String username; //email
+    String password;
+    String firstName;
+    String lastName;
+    Integer phone;
+    @Enumerated(EnumType.STRING)
+    Role role;
 
-    @Column(name = "first_name")
-    private String firstName;
-    @Column(name = "last_name")
-    private String lastName;
-    @Column(name = "email")
-    private String email;
-    @Column(name = "password")
-    private String password;
-    @Column(name = "dni")
-    private Integer dni;
-    @Column(name = "phone")
-    private Integer phone;
-    @Column(name = "age")
-    private Integer age;
-    @Column(name = "birthdate")
-    private LocalDate birthDate;
-    @Column(name = "genre")
-    private String genre;
-    @Column(name = "address")
-    private String address;
-    private String token;
-
-    public void setToken(String token){
-        this.token = token;
-    }
-
-    public String getToken(){
-        return token;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public Integer getDni() {
-        return dni;
-    }
-
-    public void setDni(Integer dni) {
-        this.dni = dni;
-    }
-
-    public Integer getPhone() {
-        return phone;
-    }
-
-    public void setPhone(Integer phone) {
-        this.phone = phone;
-    }
-
-    public Integer getAge() {
-        return age;
-    }
-
-    public LocalDate getBirthDate() {
-        return birthDate;
-    }
-
-    public void setBirthDate(LocalDate birthDate) {
-        this.birthDate = birthDate;
-    }
-
-    public String getGenre() {
-        return genre;
-    }
-
-    public void setGenre(String genre) {
-        this.genre = genre;
-    }
-
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return List.of();
     }
 }
