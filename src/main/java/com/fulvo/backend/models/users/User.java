@@ -1,4 +1,4 @@
-package com.fulvo.backend.users;
+package com.fulvo.backend.models.users;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

@@ -1,4 +1,4 @@
-package com.fulvo.backend.apiController;
+package com.fulvo.backend.controller.home;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -6,10 +6,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("api/v1")
+@RequestMapping("home")
 @RequiredArgsConstructor
-public class ApiController {
-    @PostMapping(value = "demo")
+public class Home {
+    @PostMapping(value = "main")
     public String welcome(){
         return "Welcome from secure endpoint";
     }

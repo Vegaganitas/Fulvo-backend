@@ -1,4 +1,4 @@
-package com.fulvo.backend.auth;
+package com.fulvo.backend.dto.auth;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

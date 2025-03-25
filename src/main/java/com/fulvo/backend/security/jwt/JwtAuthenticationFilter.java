@@ -1,4 +1,4 @@
-package com.fulvo.backend.jwt;
+package com.fulvo.backend.security.jwt;
 
 import java.io.IOException;
 

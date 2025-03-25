@@ -1,6 +1,6 @@
-package com.fulvo.backend.config;
+package com.fulvo.backend.security;
 
-import com.fulvo.backend.jwt.JwtAuthenticationFilter;
+import com.fulvo.backend.security.jwt.JwtAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
