@@ -1,6 +1,6 @@
 package com.fulvo.backend.repositories;
 
-import com.fulvo.backend.models.users.User;
+import com.fulvo.backend.models.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

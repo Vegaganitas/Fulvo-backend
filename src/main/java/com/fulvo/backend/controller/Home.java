@@ -1,4 +1,4 @@
-package com.fulvo.backend.controller.home;
+package com.fulvo.backend.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -9,8 +9,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("home")
 @RequiredArgsConstructor
 public class Home {
-    @PostMapping(value = "main")
-    public String welcome(){
+    @PostMapping(value = "teams")
+    public String listTeams(){
         return "Welcome from secure endpoint";
     }
 }

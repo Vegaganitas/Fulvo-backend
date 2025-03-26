@@ -1,4 +1,4 @@
-package com.fulvo.backend.models.users;
+package com.fulvo.backend.models;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -19,16 +19,16 @@ import java.util.List;
 @Table(name = "Users", schema = "public")
 public class User implements UserDetails {
     @Id
-    @GeneratedValue
-    Integer id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
     @Column(nullable = false)
-    String username; //email
-    String password;
-    String firstName;
-    String lastName;
-    Integer phone;
+    private String username; //email
+    private String password;
+    private String firstName;
+    private String lastName;
+    private String phone;
     @Enumerated(EnumType.STRING)
-    Role role;
+    private UserRole role;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

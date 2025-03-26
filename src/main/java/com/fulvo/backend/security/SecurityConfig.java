@@ -1,5 +1,7 @@
 package com.fulvo.backend.security;
 
+import com.fulvo.backend.models.User;
+import com.fulvo.backend.models.UserRole;
 import com.fulvo.backend.security.jwt.JwtAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -25,8 +27,9 @@ public class SecurityConfig {
         return httpSecurity
                 .csrf(csrf -> csrf
                         .disable())
-                .authorizeHttpRequests(authRequest -> authRequest
+                .authorizeHttpRequests(authRequest -> authRequest /// TODAS LAS RUTAS ACÁ
                         .requestMatchers("/auth/**").permitAll()
+                        .requestMatchers("/home/**").permitAll()
                         .anyRequest().authenticated())
                 .sessionManagement(sessionManager -> sessionManager
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
