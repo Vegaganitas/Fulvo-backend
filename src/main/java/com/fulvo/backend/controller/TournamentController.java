@@ -5,10 +5,7 @@ import com.fulvo.backend.dto.tournament.TournamentRequest;
 import com.fulvo.backend.services.TournamentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("tournament")
@@ -17,9 +14,14 @@ public class TournamentController {
 
     private final TournamentService tournamentService;
 
-    @PostMapping("admin/create")
+    @PostMapping(value = "admin/create")
     public ResponseEntity<GenericResponse> createTournament(@RequestBody TournamentRequest request){
         return ResponseEntity.ok(tournamentService.createTournament(request));
+    }
+
+    @DeleteMapping(value = "admin/delete")
+    public ResponseEntity<GenericResponse> deleteTournament(@RequestBody TournamentRequest request){
+        return ResponseEntity.ok(tournamentService.deleteTournament(request));
     }
 
 }

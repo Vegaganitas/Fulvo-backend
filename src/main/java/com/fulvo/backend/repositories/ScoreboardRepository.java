@@ -13,5 +13,7 @@ public interface ScoreboardRepository extends JpaRepository<Scoreboard, Integer>
 
     boolean existsByTeamAndTournament(Team team, Tournament tournament);
 
-    List<Scoreboard> findAllByTeamId(Integer id);
+    Optional<List<Scoreboard>> findAllByTeamId(Integer id);
+
+    Optional<List<Scoreboard>> findAllByTournamentId(Integer id);
 }

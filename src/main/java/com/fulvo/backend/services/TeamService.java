@@ -32,23 +32,14 @@ public class TeamService {
 
         teamRepository.save(team);
         return GenericResponse.builder()
-                .name(team.getName())
+                .name("Equipo creado")
+                .message(team.getName())
                 .build();
-    }
-
-    public GenericResponse joinTournament(JoinTournamentRequest request) {
-        Team team = teamRepository.findById(request.getTeamId())
-                .orElseThrow(() -> new RuntimeException("Equipo no encontrado"));
-        Tournament tournament = tournamentRepository.findById(request.getTournamentId())
-                .orElseThrow(() -> new RuntimeException("Torneo no encontrado"));
-
-        return scoreboardService.joinTournament(team, tournament);
     }
 
     public GenericResponse deleteTeam(TeamRequest request) {
         User captain = userService.getUser();
-
-        Team team = teamRepository.findByNameAndCaptainId(request.getName(), captain.getId())
+        Team team = teamRepository.findByNameAndCaptain(request.getName(), captain)
                 .orElseThrow(() -> new RuntimeException("Equipo no encontrado"));
         List<Scoreboard> scoreboardList = scoreboardService.findAllByTeam(team);
         if (!scoreboardList.isEmpty()){
@@ -57,8 +48,20 @@ public class TeamService {
 
         teamRepository.deleteById(team.getId());
         return GenericResponse.builder()
-                .name(request.getName())
-                .message("Equipo eliminado")
+                .name("Equipo eliminado")
+                .message(request.getName())
                 .build();
     }
+
+    public GenericResponse joinTournament(JoinTournamentRequest request) {
+        User captain = userService.getUser();
+        Team team = teamRepository.findByIdAndCaptain(request.getTeamId(), captain)
+                .orElseThrow(() -> new RuntimeException("Equipo no encontrado"));
+        Tournament tournament = tournamentRepository.findById(request.getTournamentId())
+                .orElseThrow(() -> new RuntimeException("Torneo no encontrado"));
+
+        return scoreboardService.joinTournament(team, tournament);
+    }
+
+
 }
