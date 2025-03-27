@@ -11,20 +11,29 @@ import com.fulvo.backend.repositories.ScoreboardRepository;
 import com.fulvo.backend.repositories.TeamRepository;
 import com.fulvo.backend.repositories.TournamentRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 public class TeamService {
 
     private final TeamRepository teamRepository;
-    private final TournamentRepository tournamentRepository;
+
     private final ScoreboardService scoreboardService;
     private final UserService userService;
+    private final TournamentTeamHelperService tournamentTeamHelperService;
 
     public GenericResponse createTeam(TeamRequest request) {
+        User captain = userService.getUser();
+
+        boolean exist = teamRepository.existsByNameAndCaptain(request.getName(), captain);
+        if(exist)
+            throw new RuntimeException("Ya tenes un equipo con ese nombre");
+
         Team team = Team.builder()
                 .name(request.getName())
                 .captain(userService.getUser())
@@ -54,14 +63,7 @@ public class TeamService {
     }
 
     public GenericResponse joinTournament(JoinTournamentRequest request) {
-        User captain = userService.getUser();
-        Team team = teamRepository.findByIdAndCaptain(request.getTeamId(), captain)
-                .orElseThrow(() -> new RuntimeException("Equipo no encontrado"));
-        Tournament tournament = tournamentRepository.findById(request.getTournamentId())
-                .orElseThrow(() -> new RuntimeException("Torneo no encontrado"));
-
-        return scoreboardService.joinTournament(team, tournament);
+        return tournamentTeamHelperService.joinTournament(request);
     }
-
 
 }
