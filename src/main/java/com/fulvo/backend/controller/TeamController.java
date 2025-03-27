@@ -6,10 +6,7 @@ import com.fulvo.backend.dto.team.TeamRequest;
 import com.fulvo.backend.services.TeamService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("teams")
@@ -21,6 +18,11 @@ public class TeamController {
     @PostMapping(value = "create")
     public ResponseEntity<GenericResponse> createTeam(@RequestBody TeamRequest request){
         return ResponseEntity.ok(teamService.createTeam(request));
+    }
+
+    @DeleteMapping(value = "delete")
+    public ResponseEntity<GenericResponse> deleteTeam(@RequestBody TeamRequest request){
+        return ResponseEntity.ok(teamService.deleteTeam(request));
     }
 
     @PostMapping(value = "tournament/join")

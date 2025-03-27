@@ -6,11 +6,14 @@ import com.fulvo.backend.dto.team.TeamRequest;
 import com.fulvo.backend.models.Scoreboard;
 import com.fulvo.backend.models.Team;
 import com.fulvo.backend.models.Tournament;
+import com.fulvo.backend.models.User;
 import com.fulvo.backend.repositories.ScoreboardRepository;
 import com.fulvo.backend.repositories.TeamRepository;
 import com.fulvo.backend.repositories.TournamentRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -18,7 +21,7 @@ public class TeamService {
 
     private final TeamRepository teamRepository;
     private final TournamentRepository tournamentRepository;
-    private final ScoreboardRepository scoreboardRepository;
+    private final ScoreboardService scoreboardService;
     private final UserService userService;
 
     public GenericResponse createTeam(TeamRequest request) {
@@ -39,20 +42,23 @@ public class TeamService {
         Tournament tournament = tournamentRepository.findById(request.getTournamentId())
                 .orElseThrow(() -> new RuntimeException("Torneo no encontrado"));
 
-        boolean exist = scoreboardRepository.existsByTeamAndTournament(team, tournament);
-        if (exist){
-            throw new RuntimeException("El equipo está anotado");
+        return scoreboardService.joinTournament(team, tournament);
+    }
+
+    public GenericResponse deleteTeam(TeamRequest request) {
+        User captain = userService.getUser();
+
+        Team team = teamRepository.findByNameAndCaptainId(request.getName(), captain.getId())
+                .orElseThrow(() -> new RuntimeException("Equipo no encontrado"));
+        List<Scoreboard> scoreboardList = scoreboardService.findAllByTeam(team);
+        if (!scoreboardList.isEmpty()){
+            scoreboardService.deleteAll(scoreboardList);
         }
 
-        Scoreboard scoreboard = Scoreboard.builder()
-                .team(team)
-                .tournament(tournament)
-                .build();
-
-        scoreboardRepository.save(scoreboard);
-
+        teamRepository.deleteById(team.getId());
         return GenericResponse.builder()
-                .message("Se registró al equipo")
+                .name(request.getName())
+                .message("Equipo eliminado")
                 .build();
     }
 }
