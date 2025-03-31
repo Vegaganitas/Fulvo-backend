@@ -5,6 +5,7 @@ import com.fulvo.backend.dto.match.DateResponse;
 import com.fulvo.backend.dto.match.FixtureResponse;
 import com.fulvo.backend.dto.team.TeamTournamentRequest;
 import com.fulvo.backend.dto.tournament.TournamentRequest;
+import com.fulvo.backend.dto.tournament.TournamentResponse;
 import com.fulvo.backend.models.Team;
 import com.fulvo.backend.services.TournamentService;
 import lombok.RequiredArgsConstructor;
@@ -19,7 +20,7 @@ public class TournamentController {
     private final TournamentService tournamentService;
 
     @PostMapping(value = "create")
-    public ResponseEntity<GenericResponse> createTournament(@RequestBody TournamentRequest request){
+    public ResponseEntity<TournamentResponse> createTournament(@RequestBody TournamentRequest request){
         return ResponseEntity.ok(tournamentService.createTournament(request));
     }
 
@@ -41,16 +42,6 @@ public class TournamentController {
     @PostMapping(value = "start")
     public ResponseEntity<GenericResponse> startTournament(@RequestBody TournamentRequest request){
         return ResponseEntity.ok(tournamentService.startTournament(request));
-    }
-
-    @GetMapping(value = "fixture")
-    public ResponseEntity<FixtureResponse> getFixture(@RequestBody TournamentRequest request){
-        return ResponseEntity.ok(tournamentService.getFixture(request));
-    }
-
-    @GetMapping(value = "date{date}")
-    public ResponseEntity<DateResponse> getMatchesByDate(@RequestBody TournamentRequest request, @PathVariable Integer date){
-        return ResponseEntity.ok(tournamentService.getFixture(request, date));
     }
 
 }

@@ -27,14 +27,17 @@ public class TournamentTeamHelperService {
 
     /// Tournament Services ///
     public Tournament getTournament(Integer tournamentId){
-        User admin = userService.getUser();
-        Tournament tournament = tournamentRepository.findByIdAndAdmin(tournamentId, admin)
+        Tournament tournament = tournamentRepository.findById(tournamentId)
                 .orElseThrow(() -> new RuntimeException("Torneo no encontrado"));
         return tournament;
     }
 
     public GenericResponse inviteTournament(TeamTournamentRequest request) {
         Tournament tournament = getTournament(request.getTournamentId());
+        User admin = userService.getUser();
+        if (admin != tournament.getAdmin()){
+            throw new RuntimeException("No sos el administrador del torneo");
+        }
 
         Team team = teamRepository.findById(request.getTeamId())
                 .orElseThrow(() -> new RuntimeException("Equipo no encontrado"));
@@ -44,6 +47,11 @@ public class TournamentTeamHelperService {
 
     public GenericResponse kickTeam(TeamTournamentRequest request) {
         Tournament tournament = getTournament(request.getTournamentId());
+        User admin = userService.getUser();
+        if (admin != tournament.getAdmin()){
+            throw new RuntimeException("No sos el administrador del torneo");
+        }
+
         Team team = teamRepository.findById(request.getTeamId())
                 .orElseThrow(() -> new RuntimeException("Equipo no encontrado"));
 
@@ -58,14 +66,18 @@ public class TournamentTeamHelperService {
     /// Team Services ///
 
     public Team getTeam(Integer teamId){
-        User captain = userService.getUser();
-        Team team = teamRepository.findByIdAndCaptain(teamId, captain)
+        Team team = teamRepository.findById(teamId)
                 .orElseThrow(() -> new RuntimeException("Equipo no encontrado"));
         return team;
     }
 
     public GenericResponse joinTournament(TeamTournamentRequest request) {
         Team team = getTeam(request.getTeamId());
+        User captain = userService.getUser();
+        if (captain != team.getCaptain()){
+            throw new RuntimeException("No sos el capitan del equipo");
+        }
+
         Tournament tournament = tournamentRepository.findById(request.getTournamentId())
                 .orElseThrow(() -> new RuntimeException("Torneo no encontrado"));
 
@@ -74,6 +86,11 @@ public class TournamentTeamHelperService {
 
     public GenericResponse leaveTournament(TeamTournamentRequest request) {
         Team team = getTeam(request.getTeamId());
+        User captain = userService.getUser();
+        if (captain != team.getCaptain()){
+            throw new RuntimeException("No sos el capitan del equipo");
+        }
+
         Tournament tournament = tournamentRepository.findById(request.getTournamentId())
                 .orElseThrow(() -> new RuntimeException("Torneo no encontrado"));
 

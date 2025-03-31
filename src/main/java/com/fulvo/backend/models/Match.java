@@ -20,13 +20,17 @@ public class Match {
     private Integer id;
 
     @ManyToOne
+    @JoinColumn(name = "tournament_id", referencedColumnName = "id")
+    private Tournament tournament;
+
+    @ManyToOne
     @JoinColumn(name = "home_team_id", referencedColumnName = "id")
-    private Team homeTeam;
+    private Scoreboard homeTeam;
     private Integer homeGoals;
 
     @ManyToOne
     @JoinColumn(name = "away_team_id", referencedColumnName = "id")
-    private Team awayTeam;
+    private Scoreboard awayTeam;
     private Integer awayGoals;
 
     private Date day;

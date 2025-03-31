@@ -43,8 +43,11 @@ public class TeamService {
 
     public GenericResponse deleteTeam(TeamRequest request) {
         User captain = userService.getUser();
-        Team team = teamRepository.findByNameAndCaptain(request.getName(), captain)
-                .orElseThrow(() -> new RuntimeException("Equipo no encontrado"));
+        Team team = teamRepository.findById(request.getId())
+                .orElseThrow(() -> new RuntimeException("No se encontro el equipo"));
+        if (captain != team.getCaptain())
+            throw new RuntimeException("No sos el capitán del equipo");
+
         List<Scoreboard> scoreboardList = scoreboardService.findAllByTeam(team);
         if (!scoreboardList.isEmpty()){
             scoreboardService.deleteAll(scoreboardList);

@@ -14,5 +14,6 @@ import java.util.Date;
 public class MatchResponse {
     private String homeTeam;
     private String awayTeam;
+    private Integer date;
     private Date day;
 }

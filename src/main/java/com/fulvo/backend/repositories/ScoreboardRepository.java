@@ -17,4 +17,5 @@ public interface ScoreboardRepository extends JpaRepository<Scoreboard, Integer>
 
     void deleteByTeamAndTournament(Team team, Tournament tournament);
 
+    Optional<Scoreboard> findByTeamAndTournament(Team team, Tournament tournament);
 }

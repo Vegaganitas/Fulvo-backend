@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface MatchRepository extends JpaRepository<Match, Integer> {
-    List<Match> findAllMatchesByTournament(Tournament tournament);
+    Optional<List<Match>> findAllMatchesByTournamentAndDate(Tournament tournament, Integer date);
 
-    Optional<List<Match>> findAllMatchesByDate(List<Match> matches, Integer date);
+    Optional<List<Match>> findAllByTournament(Tournament tournament);
 }

@@ -14,6 +14,7 @@ public class TournamentRequest {
     Integer id;
     String name;
     Integer teamsMax;
+    Integer teamsMin;
     Boolean roundTrip;
     User admin;
 }

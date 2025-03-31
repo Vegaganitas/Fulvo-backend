@@ -23,6 +23,8 @@ public class Tournament {
     private User admin;
 
     private Integer teamsMax;
+    private Integer teamsMin;
+    private Integer teams;
     private Boolean roundTrip;
 
 }

@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 public class TeamRequest {
+    Integer id;
     String name;
     User captain_id;
 }

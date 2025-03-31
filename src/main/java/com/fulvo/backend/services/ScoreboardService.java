@@ -41,6 +41,11 @@ public class ScoreboardService {
         if (exist){
             throw new RuntimeException("El equipo está anotado");
         }
+        if (team.getId() != 0){
+            if (tournament.getTeamsMax() == tournament.getTeams())
+                throw new RuntimeException("Torneo con cupo completo");
+            tournament.setTeams(tournament.getTeams() + 1);
+        }
         return createScoreboard(team, tournament);
     }
 
@@ -56,10 +61,15 @@ public class ScoreboardService {
 
     public void delete(Team team, Tournament tournament){
         scoreboardRepository.deleteByTeamAndTournament(team, tournament);
+        tournament.setTeams(tournament.getTeams()-1);
     }
 
     public void deleteAll(List<Scoreboard> scoreboardList) {
         scoreboardRepository.deleteAll(scoreboardList);
     }
 
+    public Scoreboard findByTeamAndTournament(Team team, Tournament tournament) {
+        return scoreboardRepository.findByTeamAndTournament(team, tournament)
+                .orElseThrow(() -> new RuntimeException("Equipo no encontrado en torneo"));
+    }
 }
