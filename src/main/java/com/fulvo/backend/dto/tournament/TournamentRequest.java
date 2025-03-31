@@ -11,6 +11,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 public class TournamentRequest {
+    Integer id;
     String name;
+    Integer teamsMax;
+    Boolean roundTrip;
     User admin;
 }

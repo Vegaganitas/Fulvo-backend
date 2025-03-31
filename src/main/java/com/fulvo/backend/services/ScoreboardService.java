@@ -54,7 +54,12 @@ public class ScoreboardService {
                 .orElseThrow(() -> new RuntimeException("No habian equipos registrados"));
     }
 
+    public void delete(Team team, Tournament tournament){
+        scoreboardRepository.deleteByTeamAndTournament(team, tournament);
+    }
+
     public void deleteAll(List<Scoreboard> scoreboardList) {
         scoreboardRepository.deleteAll(scoreboardList);
     }
+
 }

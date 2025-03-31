@@ -30,6 +30,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authRequest -> authRequest /// TODAS LAS RUTAS ACÁ
                         .requestMatchers("/auth/**").permitAll()
                         .requestMatchers("/home/**").permitAll()
+                        .requestMatchers("/user/admin/**").hasAuthority("ADMIN")
                         .anyRequest().authenticated())
                 .sessionManagement(sessionManager -> sessionManager
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))

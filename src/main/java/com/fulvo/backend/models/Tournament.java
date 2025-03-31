@@ -21,4 +21,8 @@ public class Tournament {
     @ManyToOne
     @JoinColumn(name = "id_admin", referencedColumnName = "id")
     private User admin;
+
+    private Integer teamsMax;
+    private Boolean roundTrip;
+
 }

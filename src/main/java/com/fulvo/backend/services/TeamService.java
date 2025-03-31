@@ -1,21 +1,16 @@
 package com.fulvo.backend.services;
 
 import com.fulvo.backend.dto.GenericResponse;
-import com.fulvo.backend.dto.team.JoinTournamentRequest;
+import com.fulvo.backend.dto.team.TeamTournamentRequest;
 import com.fulvo.backend.dto.team.TeamRequest;
 import com.fulvo.backend.models.Scoreboard;
 import com.fulvo.backend.models.Team;
-import com.fulvo.backend.models.Tournament;
 import com.fulvo.backend.models.User;
-import com.fulvo.backend.repositories.ScoreboardRepository;
 import com.fulvo.backend.repositories.TeamRepository;
-import com.fulvo.backend.repositories.TournamentRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -62,8 +57,16 @@ public class TeamService {
                 .build();
     }
 
-    public GenericResponse joinTournament(JoinTournamentRequest request) {
+    public GenericResponse joinTournament(TeamTournamentRequest request) {
         return tournamentTeamHelperService.joinTournament(request);
     }
 
+    public GenericResponse leaveTournament(TeamTournamentRequest request) {
+        return tournamentTeamHelperService.leaveTournament(request);
+    }
+
+    public Team getTeam(Integer id) {
+        return teamRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Equipo no encontrado"));
+    }
 }

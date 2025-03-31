@@ -39,13 +39,13 @@ public class UserService {
 
     public UserResponse getUserProfile() {
         User user = getUser();
-
         return UserResponse.builder()
                 .id(user.getId())
                 .lastName(user.getLastName())
                 .firstName(user.getFirstName())
                 .email(user.getUsername())
                 .phone(user.getPhone())
+                .role(user.getRole())
         .build();
     }
 }

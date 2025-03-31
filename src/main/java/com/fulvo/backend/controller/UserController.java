@@ -20,10 +20,15 @@ public class UserController {
         return ResponseEntity.ok(userResponse);
     }
 
-    @PostMapping("update-password")
+    @PostMapping(value = "update-password")
     public ResponseEntity<String> updatePassword(@RequestBody UpdatePasswordRequest request){
         userService.updatePassword(request);
         return ResponseEntity.ok("Contraseña actualizada correctamente");
+    }
+
+    @PostMapping(value = "admin/abc")
+    public ResponseEntity<String> ajsdkf(){
+        return ResponseEntity.ok("hola");
     }
 
 

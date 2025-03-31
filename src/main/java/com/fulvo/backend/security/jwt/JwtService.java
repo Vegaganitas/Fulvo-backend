@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.function.Function;
 
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
@@ -20,12 +21,17 @@ import io.jsonwebtoken.security.Keys;
 @Service
 public class JwtService {
 
-    private static final String SECRET_KEY="lamamadetodaslasveganitas123456789876543212444666668888888101010101010101010";
+    private static final String SECRET_KEY="lamamadetodaslasVeganitas123456789876543212444666668888888101010101010101010";
     private String token;
     private UserDetails userDetails;
 
     public String getToken(UserDetails user) {
-        return getToken(new HashMap<>(), user);
+        Map<String, Object> claims = new HashMap<>();
+        claims.put("role", user.getAuthorities().stream()
+                .findFirst()
+                .map(GrantedAuthority::getAuthority)
+                .orElse("USER"));
+        return getToken(claims, user);
     }
 
     private String getToken(Map<String, Object> extraClaims, UserDetails user) {
@@ -47,11 +53,19 @@ public class JwtService {
         this.token = token;
         this.userDetails = userDetails;
         final String username=getUsernameFromToken(token);
-        return (username.equals(userDetails.getUsername())&& !isTokenExpired(token));
+        final String role=getRoleFromToken(token);
+        return (username.equals(userDetails.getUsername()) &&
+                userDetails.getAuthorities().stream()
+                        .anyMatch(auth -> auth.getAuthority().equals(role)) &&
+                !isTokenExpired(token));
     }
 
     public String getUsernameFromToken(String token) {
         return getClaim(token, Claims::getSubject);
+    }
+
+    public String getRoleFromToken(String token){
+        return getClaim(token, claims -> claims.get("role", String.class));
     }
 
     private Claims getAllClaims(String token)
@@ -87,4 +101,17 @@ public class JwtService {
         }
         return null;
     }
+    public String getCurrentUserRole() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null && authentication.getPrincipal() instanceof UserDetails) {
+            return ((UserDetails) authentication.getPrincipal()).getAuthorities().stream()
+                    .findFirst()
+                    .map(GrantedAuthority::getAuthority)
+                    .orElse("ROLE_USER");
+        }
+        return null;
+    }
+
+
+
 }

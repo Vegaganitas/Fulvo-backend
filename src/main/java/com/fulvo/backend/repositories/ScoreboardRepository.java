@@ -9,11 +9,12 @@ import java.util.List;
 import java.util.Optional;
 
 public interface ScoreboardRepository extends JpaRepository<Scoreboard, Integer> {
-    Optional<Scoreboard> findByTeamIdAndTournamentId(Integer teamId, Integer tournamentId);
-
     boolean existsByTeamAndTournament(Team team, Tournament tournament);
 
     Optional<List<Scoreboard>> findAllByTeamId(Integer id);
 
     Optional<List<Scoreboard>> findAllByTournamentId(Integer id);
+
+    void deleteByTeamAndTournament(Team team, Tournament tournament);
+
 }

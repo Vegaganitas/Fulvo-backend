@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class JoinTournamentRequest {
+public class TeamTournamentRequest {
     private Integer teamId;
     private Integer tournamentId;
 }

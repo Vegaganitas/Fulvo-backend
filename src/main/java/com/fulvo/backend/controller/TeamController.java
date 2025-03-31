@@ -1,7 +1,7 @@
 package com.fulvo.backend.controller;
 
 import com.fulvo.backend.dto.GenericResponse;
-import com.fulvo.backend.dto.team.JoinTournamentRequest;
+import com.fulvo.backend.dto.team.TeamTournamentRequest;
 import com.fulvo.backend.dto.team.TeamRequest;
 import com.fulvo.backend.services.TeamService;
 import lombok.RequiredArgsConstructor;
@@ -26,8 +26,13 @@ public class TeamController {
     }
 
     @PostMapping(value = "tournament/join")
-    public ResponseEntity<GenericResponse> joinTournament(@RequestBody JoinTournamentRequest request){
+    public ResponseEntity<GenericResponse> joinTournament(@RequestBody TeamTournamentRequest request){
         return ResponseEntity.ok(teamService.joinTournament(request));
+    }
+
+    @DeleteMapping(value = "tournament/leave")
+    public ResponseEntity<GenericResponse> leaveTournament(@RequestBody TeamTournamentRequest request){
+        return ResponseEntity.ok(teamService.leaveTournament(request));
     }
 
 }
