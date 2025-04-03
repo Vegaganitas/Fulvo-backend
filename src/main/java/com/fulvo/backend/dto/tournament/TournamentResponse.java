@@ -10,7 +10,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class TournamentResponse {
+    private Integer id;
     private String name;
-    private Integer teamsMax;
-    private Integer teamsMin;
+    private String adminName;
+    private boolean isPrivate;
 }

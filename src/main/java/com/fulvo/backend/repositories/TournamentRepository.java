@@ -4,11 +4,10 @@ import com.fulvo.backend.models.Tournament;
 import com.fulvo.backend.models.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.util.Optional;
+import java.util.List;
 
 public interface TournamentRepository extends JpaRepository<Tournament, Integer> {
-    Optional<Tournament> findByNameAndAdmin(String name, User admin);
-    boolean existsByNameAndAdmin(String name, User admin);
+    List<Tournament> findAllByAdmin(User admin);
 
-    Optional<Tournament> findByIdAndAdmin(Integer tournamentId, User admin);
+    boolean existsByNameAndAdmin(String name, User admin);
 }

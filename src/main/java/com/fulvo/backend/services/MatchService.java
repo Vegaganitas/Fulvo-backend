@@ -1,14 +1,17 @@
 package com.fulvo.backend.services;
 
 import com.fulvo.backend.dto.GenericResponse;
+import com.fulvo.backend.dto.match.MatchDTO;
 import com.fulvo.backend.models.Match;
 import com.fulvo.backend.models.Scoreboard;
 import com.fulvo.backend.models.Tournament;
+import com.fulvo.backend.models.TournamentRegistration;
 import com.fulvo.backend.repositories.MatchRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -39,7 +42,6 @@ public class MatchService {
                 .build();
     }
 
-
     ///////DELETE MATCHES
 
     public List<Match> getMatchesByDate(Tournament tournament, Integer date){
@@ -55,4 +57,26 @@ public class MatchService {
     public void deleteAll(List<Match> matchList) {
         matchRepository.deleteAll(matchList);
     }
+
+    public MatchDTO getMatchResponse(Match match){
+        return MatchDTO.builder()
+                .id(match.getId())
+                .homeTeam(match.getHomeTeam().getTeam().getId())
+                .homeGoals(match.getHomeGoals())
+                .awayTeam(match.getAwayTeam().getTeam().getId())
+                .awayGoals(match.getAwayGoals())
+                .day(match.getDay())
+                .date(match.getDate())
+                .build();
+    }
+
+    public Match getMatch(Integer id) {
+        return matchRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("No se ha encontrado al equipo"));
+    }
+
+    public Match save(Match match){
+        return matchRepository.save(match);
+    }
+
 }

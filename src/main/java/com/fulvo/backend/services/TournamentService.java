@@ -1,10 +1,11 @@
 package com.fulvo.backend.services;
 
 import com.fulvo.backend.dto.GenericResponse;
+import com.fulvo.backend.dto.ScoreboardResponse;
 import com.fulvo.backend.dto.match.DateResponse;
 import com.fulvo.backend.dto.match.FixtureResponse;
-import com.fulvo.backend.dto.match.MatchResponse;
-import com.fulvo.backend.dto.team.TeamTournamentRequest;
+import com.fulvo.backend.dto.match.MatchDTO;
+import com.fulvo.backend.dto.registration.RegistrationDTO;
 import com.fulvo.backend.dto.tournament.TournamentRequest;
 import com.fulvo.backend.dto.tournament.TournamentResponse;
 import com.fulvo.backend.models.*;
@@ -13,8 +14,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -26,8 +25,8 @@ public class TournamentService {
 
     private final UserService userService;
     private final ScoreboardService scoreboardService;
-    private final TournamentTeamHelperService tournamentTeamHelperService;
     private final MatchService matchService;
+    private final ParticipationService participationService;
 
     public TournamentResponse createTournament(TournamentRequest request) {
         User admin = userService.getUser();
@@ -43,23 +42,15 @@ public class TournamentService {
                 .roundTrip(request.getRoundTrip())
                 .teams(0)
                 .admin(admin)
+                .isPrivate(request.getIsPrivate())
                 .build();
 
         tournamentRepository.save(tournament);
-        return TournamentResponse.builder()
-                .name(tournament.getName())
-                .teamsMax(tournament.getTeamsMax())
-                .teamsMin(tournament.getTeamsMin())
-                .build();
+        return getTournamentResponse(tournament);
     }
 
     public GenericResponse deleteTournament(TournamentRequest request) {
-        User admin = userService.getUser();
-        Tournament tournament = tournamentRepository.findById(request.getId())
-                .orElseThrow(() -> new RuntimeException("No se encontro el torneo"));
-        if (admin != tournament.getAdmin())
-            throw new RuntimeException("No sos el administrador del torneo");
-
+        Tournament tournament = authTournament(request.getId());
         List<Match> matchList = matchService.findAllByTournament(tournament);
         if (!matchList.isEmpty()){
             matchService.deleteAll(matchList);
@@ -76,47 +67,98 @@ public class TournamentService {
                 .build();
     }
 
-    public GenericResponse joinTournament(TeamTournamentRequest request) {
-        return tournamentTeamHelperService.inviteTournament(request);
-    }
-
-    public GenericResponse kickTeam(TeamTournamentRequest request) {
-        return tournamentTeamHelperService.kickTeam(request);
-    }
-
-    public GenericResponse startTournament(TournamentRequest request) {
+    public Tournament authTournament(Integer id){
+        Tournament tournament = getTournament(id);
         User admin = userService.getUser();
-        Tournament tournament = tournamentRepository.findById(request.getId())
-                .orElseThrow(() -> new RuntimeException("No se encontro el torneo"));
-        if (admin != tournament.getAdmin())
+        if (admin != tournament.getAdmin()){
             throw new RuntimeException("No sos el administrador del torneo");
-
-        List<Scoreboard> teams = scoreboardService.findAllByTournament(tournament);
-        if (teams.size() < tournament.getTeamsMin())
-            throw new RuntimeException("No se alcanzó la cantidad mínima de equipos");
-
-        if (teams.size() % 2 != 0){
-            scoreboardService.joinTournament(tournamentTeamHelperService.getTeam(0),tournament);
-            teams.add(scoreboardService
-                    .findByTeamAndTournament(tournamentTeamHelperService.getTeam(0), tournament));
         }
+        return tournament;
+    }
 
-        Collections.shuffle(teams);
-        matchService.generateMatches(teams, !tournament.getRoundTrip());
-        if (tournament.getRoundTrip()){
-            matchService.generateMatches(teams, tournament.getRoundTrip());
-        }
+    public Tournament getTournament(Integer id){
+        return tournamentRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Torneo no encontrado"));
+    }
 
-        return GenericResponse.builder()
-                .name("Fixture generado")
-                .message("Partidos creados exitosamente")
+    public TournamentResponse getTournamentResponse(Tournament tournament) {
+        return TournamentResponse.builder()
+                .id(tournament.getId())
+                .name(tournament.getName())
+                .adminName(tournament.getAdmin().getLastName() + ", " + tournament.getAdmin().getFirstName())
+                .isPrivate(tournament.getIsPrivate())
                 .build();
     }
 
+    public List<TournamentResponse> getMyTournaments() {
+        User admin = userService.getUser();
+        List<Tournament> tournaments = tournamentRepository.findAllByAdmin(admin);
+        return tournaments.stream()
+                .map(this::getTournamentResponse)
+                .collect(Collectors.toList());
+    }
 
-    public FixtureResponse getFixture(TournamentRequest request) {
-        Tournament tournament = tournamentRepository.findById(request.getId())
-                .orElseThrow(() -> new RuntimeException("No se encontro el torneo"));
+    public TournamentResponse selectTournament(TournamentRequest request) {
+        Tournament tournament = authTournament(request.getId());
+        return getTournamentResponse(tournament);
+    }
+
+    public GenericResponse approveRequest(RegistrationDTO request){
+        Tournament tournament = authTournament(request.getTournamentId());
+        TournamentRegistration registration = participationService.findRegistrationById(request.getId())
+                .orElseThrow(() -> new RuntimeException("No se ha encontrado la solicitud"));
+
+        registration.setStatus(StatusParticipation.ACCEPT);
+        participationService.save(registration);
+        return scoreboardService.joinTournament(registration.getTeam(), tournament);
+    }
+
+    public GenericResponse rejectRequest(RegistrationDTO request){
+        Tournament tournament = authTournament(request.getTournamentId());
+        TournamentRegistration registration = participationService.findRegistrationById(request.getId())
+                .orElseThrow(() -> new RuntimeException("No se ha encontrado la solicitud"));
+
+        registration.setStatus(StatusParticipation.DECLINE);
+        participationService.save(registration);
+        return GenericResponse.builder()
+                .name("Solicitud rechazada")
+                .message("Se rechazó la solicitud de " + registration.getTeam().getName())
+                .build();
+    }
+
+    public List<TournamentResponse> getAllTournaments(){
+        List<Tournament> tournaments = tournamentRepository.findAll();
+        return tournaments.stream()
+                .map(this::getTournamentResponse)
+                .collect(Collectors.toList());
+    }
+
+    public List<RegistrationDTO> getPendingRequests(TournamentRequest request) {
+        Tournament tournament = authTournament(request.getId());
+        List<TournamentRegistration> pendings = participationService.findRegistrationsPending(tournament, StatusParticipation.PENDING);
+        return pendings.stream()
+                .map(participationService::getRegistrationResponse)
+                .collect(Collectors.toList());
+    }
+
+    private DateResponse getDateResponse(Tournament tournament, Integer date){
+        List<Match> matches = matchService.getMatchesByDate(tournament, date);
+        List<MatchDTO> matchResponse = matches.stream()
+                .map(matchService::getMatchResponse)
+                .collect(Collectors.toList());
+        return DateResponse.builder()
+                .date(date)
+                .matches(matchResponse)
+                .build();
+    }
+
+    public DateResponse getFixtureByDate(Integer id, Integer date){
+        Tournament tournament = getTournament(id);
+        return getDateResponse(tournament, date);
+    }
+
+    public FixtureResponse getFixture(Integer id) {
+        Tournament tournament = getTournament(id);
         int dates = tournament.getRoundTrip() ? (tournament.getTeams()-1) * 2 : tournament.getTeams()-1;
         List<DateResponse> matches = new ArrayList<>();
         for(int i=1; i<=dates; i++){
@@ -129,32 +171,11 @@ public class TournamentService {
                 .build();
     }
 
-
-    public DateResponse getFixture(TournamentRequest request, Integer date) {
-        Tournament tournament = tournamentRepository.findById(request.getId())
-                .orElseThrow(() -> new RuntimeException("No se encontro el torneo"));
-
-        return getDateResponse(tournament, date);
-    }
-
-    private DateResponse getDateResponse(Tournament tournament, int date){
-        List<Match> matches = matchService.getMatchesByDate(tournament, date);
-        List<MatchResponse> matchResponses = matches.stream()
-                .map(this::getMatchResponse)
+    public List<ScoreboardResponse> getTable(Integer id) {
+        Tournament tournament = getTournament(id);
+        List<Scoreboard> scoreboards = scoreboardService.findAllByTournament(tournament);
+        return scoreboards.stream()
+                .map(scoreboardService::getScoreboardResponse)
                 .collect(Collectors.toList());
-        return DateResponse.builder()
-                .date(date)
-                .matches(matchResponses)
-                .build();
     }
-
-    public MatchResponse getMatchResponse(Match match){
-        return MatchResponse.builder()
-                .homeTeam(match.getHomeTeam().getTeam().getName())
-                .awayTeam(match.getAwayTeam().getTeam().getName())
-                .day(match.getDay())
-                .date(match.getDate())
-                .build();
-    }
-
 }

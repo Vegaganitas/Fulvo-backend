@@ -13,6 +13,7 @@ import lombok.NoArgsConstructor;
 public class TournamentRequest {
     Integer id;
     String name;
+    Boolean isPrivate;
     Integer teamsMax;
     Integer teamsMin;
     Boolean roundTrip;

@@ -27,11 +27,30 @@ public class Scoreboard {
 
     private Integer points;
     private Integer gamesPlayed;
-    private Integer gamesWon;
-    private Integer gamesDraw;
-    private Integer gamesLost;
+    private Integer wins;
+    private Integer draws;
+    private Integer loses;
     private Integer goalsFor;
     private Integer goalsAgainst;
 
 
+    public void incrementGamesPlayed() {
+        this.gamesPlayed++;
+    }
+
+    public void addPoints(int i) {
+        this.points += i;
+    }
+
+    public void incrementWins() {
+        this.wins++;
+    }
+
+    public void incrementDraws() {
+        this.draws++;
+    }
+
+    public void incrementLosses() {
+        this.loses++;
+    }
 }

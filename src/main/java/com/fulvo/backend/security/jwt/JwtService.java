@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -21,7 +22,8 @@ import io.jsonwebtoken.security.Keys;
 @Service
 public class JwtService {
 
-    private static final String SECRET_KEY="lamamadetodaslasVeganitas123456789876543212444666668888888101010101010101010";
+    @Value("${security.jwt.secret}")
+    private String SECRET_KEY;
     private String token;
     private UserDetails userDetails;
 
@@ -39,7 +41,7 @@ public class JwtService {
                 .setClaims(extraClaims)
                 .setSubject(user.getUsername())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis()+1000*60*24))
+                .setExpiration(new Date(System.currentTimeMillis()+1000*60*60*24))
                 .signWith(getKey(), SignatureAlgorithm.HS256)
                 .compact();
     }

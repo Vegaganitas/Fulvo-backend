@@ -26,5 +26,5 @@ public class Tournament {
     private Integer teamsMin;
     private Integer teams;
     private Boolean roundTrip;
-
+    private Boolean isPrivate;
 }

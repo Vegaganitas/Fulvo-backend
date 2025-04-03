@@ -13,6 +13,6 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class DateResponse {
-    private List<MatchResponse> matches;
+    private List<MatchDTO> matches;
     private Integer date;
 }

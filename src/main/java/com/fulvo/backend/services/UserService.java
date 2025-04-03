@@ -27,16 +27,6 @@ public class UserService {
         return user;
     }
 
-    public void updatePassword (UpdatePasswordRequest request){
-        User user = getUser();
-        if(!passwordEncoder.matches(request.getOldPassword(), user.getPassword())){
-            throw new IllegalArgumentException("Incorrect password");
-        }
-
-        user.setPassword(passwordEncoder.encode(request.getNewPassword()));
-        userRepository.save(user);
-    }
-
     public UserResponse getUserProfile() {
         User user = getUser();
         return UserResponse.builder()
@@ -47,5 +37,15 @@ public class UserService {
                 .phone(user.getPhone())
                 .role(user.getRole())
         .build();
+    }
+
+    public void updatePassword (UpdatePasswordRequest request){
+        User user = getUser();
+        if(!passwordEncoder.matches(request.getOldPassword(), user.getPassword())){
+            throw new IllegalArgumentException("Incorrect password");
+        }
+
+        user.setPassword(passwordEncoder.encode(request.getNewPassword()));
+        userRepository.save(user);
     }
 }

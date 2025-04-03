@@ -11,9 +11,12 @@ import java.util.Date;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class MatchResponse {
-    private String homeTeam;
-    private String awayTeam;
+public class MatchDTO {
+    private Integer id;
+    private Integer homeTeam;
+    private Integer homeGoals;
+    private Integer awayTeam;
+    private Integer awayGoals;
     private Integer date;
     private Date day;
 }
